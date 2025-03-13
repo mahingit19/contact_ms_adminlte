@@ -1,23 +1,18 @@
 <?php
 
-$APP_NAME = "adminlte_practice01";
-$APP_URL = $_SERVER['DOCUMENT_ROOT'] . "/$APP_NAME";
+require_once "includes/functions.php";
 
-session_start();
-if (!isset($_SESSION["email"]) && !isset($_SESSION["password"])) {
-    header("Location: /$APP_NAME/pages/login-page.php");
-    exit;
-}
+include "includes/session.php" ;
 
-include $APP_URL . ("/layout/header.php");
+include "layout/header.php" ;
 
 ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <?php
-        include $APP_URL . ("/layout/main-header.php");
-        include $APP_URL . ("/layout/sidebar.php");
+        include "layout/main-header.php" ;
+        include "layout/sidebar.php" ;
         ?>
 
         <div class="content-wrapper">
@@ -45,20 +40,44 @@ include $APP_URL . ("/layout/header.php");
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="/<?= $APP_NAME ?>/pages/contact-list.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            <a href="contact-list.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
         <?php
-        include $APP_URL . ("/layout/main-footer.php");
-        include $APP_URL . ("/layout/control-sidebar.php");
+        include "layout/main-footer.php" ;
+        include "layout/control-sidebar.php" ;
         ?>
     </div>
 
-    <script src="/<?= $APP_NAME ?>/assets/custom/js/dashboard-js.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: window.location.href, // Replace with your API endpoint
+                method: 'GET', // You can change this to POST if needed
+                dataType: 'json',
+                data: {
+                    action: "readContacts",
+                },
+                success: function(response) {
+                    // Check if the response is an array
+                    if (Array.isArray(response)) {
+                        let rowCount = response.length; // Get the number of rows
+                        console.log('Number of rows:', rowCount);
+                        document.getElementById('contact-num').innerHTML = rowCount;
+                    } else {
+                        console.log('The response is not an array.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('An error occurred:', status, error);
+                }
+            });
+        });
+    </script>
 
     <?php
-    include $APP_URL . ("/layout/footer.php");
+    include "layout/footer.php" ;
     ?>

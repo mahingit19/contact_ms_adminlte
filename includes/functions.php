@@ -1,5 +1,18 @@
 <?php
 
+// app config file
+require_once("config.php");
+
+// Connect to the database
+function db_connect()
+{
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+}
+
 if (isset($_POST['email']) && isset($_POST['password'])) {
     if (empty($_POST['email']) || empty($_POST['password'])) {
         echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
@@ -10,14 +23,15 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
     login($email, $password);
+    exit;
 }
 
 function login($email, $password)
 {
-    require("config.php");
+    $conn = db_connect();
 
     $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $sql);
+    $result = $conn->query($sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row["password"])) {
@@ -41,14 +55,16 @@ function login($email, $password)
 if ($_SERVER['REQUEST_METHOD'] === "GET" && isset($_GET['action']) && $_GET['action'] === 'readContacts') {
     header('Content-Type: application/json');
     readContacts();
+    exit;
 }
 
 function readContacts()
 {
-    require("config.php");
+    $conn = db_connect();
+
     $sql = "SELECT * FROM contacts";
-    $result = mysqli_query($conn, $sql);
-    $contact_num = mysqli_num_rows($result);
+    $result = $conn->query($sql);
+    $contact_num = $result->num_rows;
 
     $data = array();
     if ($result->num_rows > 0) {
@@ -61,11 +77,12 @@ function readContacts()
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action']) && $_POST['action'] === 'addContact') {
     addContact();
+    exit;
 }
 
 function addContact()
 {
-    require('config.php');
+    $conn = db_connect();
 
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
@@ -98,7 +115,7 @@ function addContact()
             }
 
             // Move the file to the upload directory
-            move_uploaded_file($imageTmpName, $uploadPath);
+            move_uploaded_file($imageTmpName,$uploadPath);
         }
     } else {
         $uploadPath = "";
@@ -119,11 +136,13 @@ function addContact()
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteContact') {
     deleteContact();
+    exit;
 }
 
 function deleteContact()
 {
-    require("config.php");
+    $conn = db_connect();
+
     if (isset($_POST["id"])) {
         $id = $_POST["id"];
 
@@ -150,11 +169,13 @@ function deleteContact()
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'editContact') {
     editContact();
+    exit;
 }
 
 function editContact()
 {
-    require('config.php');
+    $conn = db_connect();
+    
     $id = $_POST['id'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];

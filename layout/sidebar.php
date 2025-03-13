@@ -7,7 +7,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="\<?= $APP_NAME ?>\assets\img\profile-picture.png" class="img-circle" alt="User Image">
+                <img src="assets\img\profile-picture.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p><?= $_SESSION['username'] ?></p>
@@ -32,12 +32,25 @@
         <ul class="sidebar-menu">
             <li class="header">MENU</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="menu-links"><a href="/<?= $APP_NAME ?>/"><i class="bi bi-speedometer"></i> <span>Dashboard</span></a></li>
-            <li class="menu-links"><a href="/<?= $APP_NAME ?>/pages/contact-list.php"><i class="bi bi-person-lines-fill"></i> <span>Contact List</span></a></li>
+            <li class="menu-links"><a href="<?= APP_URI ?>/"><i class="bi bi-speedometer"></i> <span>Dashboard</span></a></li>
+            <li class="menu-links"><a href="<?= APP_URI ?>/contact-list.php"><i class="bi bi-person-lines-fill"></i> <span>Contact List</span></a></li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
 </aside>
 
-<script src="/<?= $APP_NAME ?>/assets/custom/js/sidebar-js.js"></script>
+<script>
+    $(document).ready(function() {
+        // Get the current URL path
+        var currentPath = window.location.pathname;
+
+        // Loop through all <a> tags in the menu and check their href
+        $(".sidebar-menu .menu-links a").each(function() {
+            if ($(this).attr("href") === currentPath) {
+                // Add active class to the parent <li> if href matches the current path
+                $(this).parent("li").addClass("active");
+            }
+        });
+    });
+</script>

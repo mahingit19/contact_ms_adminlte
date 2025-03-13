@@ -1,23 +1,18 @@
 <?php
 
-$APP_NAME = "adminlte_practice01";
-$APP_URL = $_SERVER['DOCUMENT_ROOT'] . "/$APP_NAME";
+require_once "includes/functions.php";
 
-session_start();
-if (!isset($_SESSION["email"]) && !isset($_SESSION["password"])) {
-    header("Location: /$APP_NAME/pages/login-page.php");
-    exit;
-}
+include "includes/session.php" ;
 
-include $APP_URL . ("/layout/header.php");
+include "layout/header.php" ;
 
 ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <?php
-        include $APP_URL . ("/layout/main-header.php");
-        include $APP_URL . ("/layout/sidebar.php");
+        include "layout/main-header.php" ;
+        include "layout/sidebar.php" ;
         ?>
 
         <!-- Content Wrapper. Contains page content -->
@@ -69,7 +64,7 @@ include $APP_URL . ("/layout/header.php");
                                     </table>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -80,17 +75,81 @@ include $APP_URL . ("/layout/header.php");
         </div>
 
         <?php
-        include $APP_URL . ("/layout/main-footer.php");
-        include $APP_URL . ("/layout/control-sidebar.php");
+        include "layout/main-footer.php" ;
+        include "layout/control-sidebar.php" ;
         ?>
 
     </div>
 
-    <script src="/<?= $APP_NAME ?>/assets/custom/js/contact-list-js.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Load table data using AJAX
+            function loadTableData() {
+                $.ajax({
+                    url: window.location.href, // Path to your PHP script
+                    method: "GET",
+                    data: {
+                        action: "readContacts",
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        let rows = "";
+                        data.forEach((item) => {
+                            rows += `<tr>
+                              <td class="id">${item.id}</td>
+                              <td class="image-path" data-src="${item.photo}"><img src="${item.photo}" width="50px"></td>
+                              <td><span class="first-name">${item.first_name}</span> <span class="last-name">${item.last_name}</span></td>
+                              <td class="email">${item.email}</td>
+                              <td>+880<span class="phone">${item.phone}</span></td>
+                              <td><span class="address">${item.address}</span>, <span class="city">${item.city}</span>, <span class="state">${item.state}</span>, <span class="zip">${item.zip}</span>, <span class="country">${item.country}</span></td>
+                              <td>
+                                  <div class="d-flex gap-2">
+                                      <button class="btn btn-primary edit-btn"><i class="bi bi-pencil-square"></i></button>
+                                      <button class="btn btn-danger delete-btn" data-id="${item.id}"><i class="bi bi-trash3-fill"></i></button>
+                                  </div>
+                              </td>
+                          </tr>`;
+                        });
+                        $("#table-body").html(rows);
+                        $("#total").html($(data).length);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("An error occurred:", error);
+                    },
+                });
+            }
+
+            loadTableData(); // Load table data on page load
+
+            // Use event delegation for delete buttons
+            $(document).on("click", ".delete-btn", function() {
+                const button = $(this); // Reference to the clicked button
+                const id = button.data("id");
+                if (confirm("Are you sure you want to delete this row?")) {
+                    $.ajax({
+                        url: window.location.href, // PHP script to handle the data
+                        type: "POST",
+                        data: {
+                            id: id,
+                            action: "deleteContact",
+                        },
+                        success: function(response) {
+                            alert("Data deleted successfully: " + response);
+                            button.closest("tr").remove(); // Remove the row from the table
+                            loadTableData(); // Refresh the table
+                        },
+                        error: function(xhr, status, error) {
+                            alert("An error occurred: " + error);
+                        },
+                    });
+                }
+            });
+        });
+    </script>
     <!-- /.content -->
 
-    <?php include $APP_URL . "/pages/form-modal.php"; ?>
+    <?php include "form-modal.php"; ?>
 
     <?php
-    include $APP_URL . ("/layout/footer.php");
+    include "layout/footer.php";
     ?>
