@@ -38,7 +38,7 @@ include $APP_URL . ("/layout/header.php");
                         <!-- small box -->
                         <div class="small-box bg-yellow">
                             <div class="inner">
-                                <h3>44</h3>
+                                <h3 id="contact-num"></h3>
 
                                 <p>Contact List</p>
                             </div>
@@ -56,6 +56,8 @@ include $APP_URL . ("/layout/header.php");
         include $APP_URL . ("/layout/control-sidebar.php");
         ?>
     </div>
+
+    <script src="/<?= $APP_NAME ?>/assets/custom/js/dashboard-js.js"></script>
 
     <?php
     include $APP_URL . ("/layout/footer.php");

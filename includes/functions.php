@@ -48,6 +48,7 @@ function readContacts()
     require("config.php");
     $sql = "SELECT * FROM contacts";
     $result = mysqli_query($conn, $sql);
+    $contact_num = mysqli_num_rows($result);
 
     $data = array();
     if ($result->num_rows > 0) {

@@ -32,21 +32,12 @@
         <ul class="sidebar-menu">
             <li class="header">MENU</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="menu-links"><a href="/<?= $APP_NAME ?>/"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
-            <li class="menu-links"><a href="/<?= $APP_NAME ?>/pages/contact-list.php"><i class="fa fa-link"></i> <span>Contact List</span></a></li>
+            <li class="menu-links"><a href="/<?= $APP_NAME ?>/"><i class="bi bi-speedometer"></i> <span>Dashboard</span></a></li>
+            <li class="menu-links"><a href="/<?= $APP_NAME ?>/pages/contact-list.php"><i class="bi bi-person-lines-fill"></i> <span>Contact List</span></a></li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
 </aside>
 
-<script>
-    $(document).ready(function() {
-    $(".sidebar-menu .menu-links a").on("click", function() {
-        $(".sidebar-menu .menu-links").removeClass("active"); // Remove active class from all li elements
-        $(this).parent("li").addClass("active"); // Add active class to the clicked li
-    });
-});
-
-
-</script>
+<script src="/<?= $APP_NAME ?>/assets/custom/js/sidebar-js.js"></script>
