@@ -46,4 +46,4 @@ include $APP_URL . ("/layout/header.php");
   </div>
   <!-- /.login-box -->
 
-  <script src="<?= $APP_URI ?>/assets/custom/js/login-page-js.js"></script>
+  <script src="/<?= $APP_NAME ?>/assets/custom/js/login-page-js.js"></script>
