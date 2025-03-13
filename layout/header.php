@@ -9,28 +9,28 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="<?= $app_url ?>/assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/<?= $APP_NAME?>/assets/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?= $app_url ?>/assets/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/<?= $APP_NAME ?>/assets/dist/css/AdminLTE.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="<?= $app_url ?>/assets/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="/<?= $APP_NAME ?>/assets/plugins/iCheck/square/blue.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect.
   -->
-  <link rel="stylesheet" href="<?= $app_url ?>/assets/dist/css/skins/skin-blue.min.css">
-  <link rel="stylesheet" href="<?= $app_url ?>/assets/custom/css/style.css">
+  <link rel="stylesheet" href="/<?= $APP_NAME ?>/assets/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="/<?= $APP_NAME ?>/assets/custom/css/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
 
   <!-- jQuery 2.2.0 -->
-<script src="<?= $app_url ?>/assets/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script src="/<?= $APP_NAME ?>/assets/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="<?= $app_url ?>/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/<?= $APP_NAME ?>/assets/bootstrap/js/bootstrap.min.js"></script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

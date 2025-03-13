@@ -118,14 +118,14 @@
         <!-- Menu Toggle Button -->
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           <!-- The user image in the navbar-->
-          <img src="assets\img\profile-picture.png" class="user-image" alt="User Image">
+          <img src="\<?= $APP_NAME ?>\assets\img\profile-picture.png" class="user-image" alt="User Image">
           <!-- hidden-xs hides the username on small devices so only the image appears. -->
           <span class="hidden-xs"><?= $_SESSION['username'] ?></span>
         </a>
         <ul class="dropdown-menu">
           <!-- The user image in the menu -->
           <li class="user-header">
-            <img src="assets\img\profile-picture.png" class="img-circle" alt="User Image">
+            <img src="\<?= $APP_NAME ?>\assets\img\profile-picture.png" class="img-circle" alt="User Image">
 
             <p>
             <?= $_SESSION['username'] ?>
@@ -152,7 +152,7 @@
               <a href="#" class="btn btn-default btn-flat">Profile</a>
             </div>
             <div class="pull-right">
-              <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
+              <a href="/<?= $APP_NAME ?>/pages/logout.php" class="btn btn-default btn-flat">Sign out</a>
             </div>
           </li>
         </ul>

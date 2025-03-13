@@ -86,4 +86,4 @@
 </div>
 </div>
 
-<script src="assets/custom/js/form-modal-js.js"></script>
+<script src="/<?= $APP_NAME ?>/assets/custom/js/form-modal-js.js"></script>

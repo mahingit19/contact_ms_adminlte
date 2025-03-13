@@ -7,7 +7,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="assets\img\profile-picture.png" class="img-circle" alt="User Image">
+                <img src="\<?= $APP_NAME ?>\assets\img\profile-picture.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p><?= $_SESSION['username'] ?></p>
@@ -30,19 +30,23 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">HEADER</li>
+            <li class="header">MENU</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-            <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-            <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#">Link in level 2</a></li>
-                    <li><a href="#">Link in level 2</a></li>
-                </ul>
-            </li>
+            <li class="menu-links"><a href="/<?= $APP_NAME ?>/"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
+            <li class="menu-links"><a href="/<?= $APP_NAME ?>/pages/contact-list.php"><i class="fa fa-link"></i> <span>Contact List</span></a></li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
 </aside>
+
+<script>
+    $(document).ready(function() {
+    $(".sidebar-menu .menu-links a").on("click", function() {
+        $(".sidebar-menu .menu-links").removeClass("active"); // Remove active class from all li elements
+        $(this).parent("li").addClass("active"); // Add active class to the clicked li
+    });
+});
+
+
+</script>

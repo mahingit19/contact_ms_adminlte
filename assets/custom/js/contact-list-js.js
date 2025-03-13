@@ -1,8 +1,11 @@
 $(document).ready(function () {
+
+  const app_uri = "/adminlte_practice01/";
+
   // Load table data using AJAX
   function loadTableData() {
     $.ajax({
-      url: "functions.php", // Path to your PHP script
+      url: app_uri + "includes/functions.php", // Path to your PHP script
       method: "GET",
       data: {
         action: "readContacts",
@@ -13,7 +16,7 @@ $(document).ready(function () {
         data.forEach((item) => {
           rows += `<tr>
                                 <td class="id">${item.id}</td>
-                                <td class="image-path" data-src="${item.photo}"><img src="${item.photo}" width="50px"></td>
+                                <td class="image-path" data-src="${item.photo}"><img src="${app_uri}includes/${item.photo}" width="50px"></td>
                                 <td><span class="first-name">${item.first_name}</span> <span class="last-name">${item.last_name}</span></td>
                                 <td class="email">${item.email}</td>
                                 <td>+880<span class="phone">${item.phone}</span></td>
@@ -43,7 +46,7 @@ $(document).ready(function () {
     const id = button.data("id");
     if (confirm("Are you sure you want to delete this row?")) {
       $.ajax({
-        url: "functions.php", // PHP script to handle the data
+        url: app_uri + "includes/functions.php", // PHP script to handle the data
         type: "POST",
         data: {
           id: id,

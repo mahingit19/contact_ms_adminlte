@@ -1,11 +1,7 @@
-<!-- REQUIRED JS SCRIPTS -->
-
-
-
 <!-- AdminLTE App -->
-<script src="<?= $app_url ?>/assets/dist/js/app.min.js"></script>
+<script src="/<?= $APP_NAME ?>/assets/dist/js/app.min.js"></script>
 <!-- iCheck -->
-<script src="<?= $app_url ?>/assets/plugins/iCheck/icheck.min.js"></script>
+<script src="/<?= $APP_NAME ?>/assets/plugins/iCheck/icheck.min.js"></script>
 
 <script>
   $(function () {
