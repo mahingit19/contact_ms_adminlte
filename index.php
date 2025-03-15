@@ -19,7 +19,7 @@ include "layout/header.php" ;
             <section class="content-header">
                 <h1>
                     Dashboard
-                    <small>All the contact lists are here</small>
+                    <small>Your customized admin panel</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>

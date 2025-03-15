@@ -21,7 +21,7 @@ include "layout/header.php" ;
             <section class="content-header">
                 <h1>
                     Contact List
-                    <small>All the contact lists are here</small>
+                    <small>Total Contacts <span id="total"></span></small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
