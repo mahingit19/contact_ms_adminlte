@@ -43,7 +43,7 @@
 <script>
     $(document).ready(function() {
         // Get the current URL path
-        var currentPath = window.location.pathname;
+        var currentPath = window.location.href;
 
         // Loop through all <a> tags in the menu and check their href
         $(".sidebar-menu .menu-links a").each(function() {

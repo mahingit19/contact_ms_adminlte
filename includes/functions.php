@@ -3,6 +3,24 @@
 // app config file
 require_once("config.php");
 
+session_start();
+
+// Redirect to login page if not logged in
+switch ($_SERVER['REQUEST_URI']) {
+    case "/adminlte_practice01/login.php":
+        if (isset($_SESSION["email"]) && isset($_SESSION["password"])) {
+            header("Location: " . APP_URI . "/");
+            exit;
+        }
+        break;
+    default:
+        if (!isset($_SESSION["email"]) && !isset($_SESSION["password"])) {
+            header("Location: " . APP_URI . "/login.php");
+            exit;
+        }
+        break;
+}
+
 // Connect to the database
 function db_connect()
 {
@@ -13,35 +31,22 @@ function db_connect()
     return $conn;
 }
 
-if (isset($_POST['email']) && isset($_POST['password'])) {
-    if (empty($_POST['email']) || empty($_POST['password'])) {
-        echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
-        exit;
-    }
-    // Send JSON response
-    header('Content-Type: application/json');
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    login($email, $password);
-    exit;
-}
+$conn = db_connect();
 
 function login($email, $password)
 {
-    $conn = db_connect();
+    global $conn;
 
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = $conn->query($sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row["password"])) {
-            session_start();
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $password;
             $_SESSION["username"] = $row["username"];
             echo json_encode(['status' => 'success']);
         } else {
-
             echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
         }
         exit;
@@ -52,15 +57,9 @@ function login($email, $password)
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === "GET" && isset($_GET['action']) && $_GET['action'] === 'readContacts') {
-    header('Content-Type: application/json');
-    readContacts();
-    exit;
-}
-
 function readContacts()
 {
-    $conn = db_connect();
+    global $conn;
 
     $sql = "SELECT * FROM contacts";
     $result = $conn->query($sql);
@@ -75,14 +74,9 @@ function readContacts()
     echo json_encode($data);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action']) && $_POST['action'] === 'addContact') {
-    addContact();
-    exit;
-}
-
 function addContact()
 {
-    $conn = db_connect();
+    global $conn;
 
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
@@ -115,7 +109,7 @@ function addContact()
             }
 
             // Move the file to the upload directory
-            move_uploaded_file($imageTmpName,$uploadPath);
+            move_uploaded_file($imageTmpName, $uploadPath);
         }
     } else {
         $uploadPath = "";
@@ -134,14 +128,9 @@ function addContact()
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteContact') {
-    deleteContact();
-    exit;
-}
-
 function deleteContact()
 {
-    $conn = db_connect();
+    global $conn;
 
     if (isset($_POST["id"])) {
         $id = $_POST["id"];
@@ -167,15 +156,10 @@ function deleteContact()
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'editContact') {
-    editContact();
-    exit;
-}
-
 function editContact()
 {
-    $conn = db_connect();
-    
+    global $conn;
+
     $id = $_POST['id'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
@@ -240,4 +224,45 @@ function editContact()
     } else {
         echo "Error updating record: " . mysqli_error($conn);
     }
+}
+
+if (isset($_POST['email']) && isset($_POST['password'])) {
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
+        exit;
+    }
+    // Send JSON response
+    header('Content-Type: application/json');
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    login($email, $password);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action'])) {
+    switch ($_POST['action']) {
+        case 'addContact':
+            addContact();
+            break;
+
+        case 'readContacts':
+            header('Content-Type: application/json');
+            readContacts();
+            break;
+
+        case 'editContact':
+            editContact();
+            break;
+
+        case 'deleteContact':
+            deleteContact();
+            break;
+
+        default:
+            // Handle invalid actions
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid action']);
+            break;
+    }
+    exit;
 }

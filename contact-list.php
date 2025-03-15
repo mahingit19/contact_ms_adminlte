@@ -2,8 +2,6 @@
 
 require_once "includes/functions.php";
 
-include "includes/session.php" ;
-
 include "layout/header.php" ;
 
 ?>
@@ -87,7 +85,7 @@ include "layout/header.php" ;
             function loadTableData() {
                 $.ajax({
                     url: window.location.href, // Path to your PHP script
-                    method: "GET",
+                    method: "POST",
                     data: {
                         action: "readContacts",
                     },
@@ -284,7 +282,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: window.location.href, // Path to your PHP script
-            method: "GET",
+            method: "POST",
             dataType: "json",
             data: {
                 action: "readContacts",

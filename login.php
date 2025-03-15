@@ -2,12 +2,6 @@
 
 require_once "includes/functions.php";
 
-session_start();
-if (isset($_SESSION["email"]) && isset($_SESSION["password"])) {
-    header("Location: " . APP_URI ."/");
-    exit;
-}
-
 include "layout/header.php" ;
 
 ?>

@@ -2,8 +2,6 @@
 
 require_once "includes/functions.php";
 
-include "includes/session.php" ;
-
 include "layout/header.php" ;
 
 ?>
@@ -56,7 +54,7 @@ include "layout/header.php" ;
         $(document).ready(function() {
             $.ajax({
                 url: window.location.href, // Replace with your API endpoint
-                method: 'GET', // You can change this to POST if needed
+                method: 'POST', // You can change this to POST if needed
                 dataType: 'json',
                 data: {
                     action: "readContacts",
