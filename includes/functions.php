@@ -221,9 +221,6 @@ function editContact()
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $oldPhoto = $row['photo'];
-    if (!empty($_FILES['fileToUpload']['name'])) {
-        unlink($oldPhoto);
-    }
 
     if (isset($_FILES['fileToUpload'])) {
 
@@ -252,6 +249,10 @@ function editContact()
                 "error" => "JPG, JPEG, PNG & GIF files are allowed."
             ]);
             exit;
+        }
+
+        if (!empty($_FILES['fileToUpload']['name'])) {
+            unlink($oldPhoto);
         }
 
         // Check for upload errors
