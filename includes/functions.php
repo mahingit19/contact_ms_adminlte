@@ -65,7 +65,7 @@ function readContacts()
     $result = $conn->query($sql);
     $contact_num = $result->num_rows;
 
-    $data = array();
+    $data = [];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
@@ -88,6 +88,14 @@ function addContact()
     $zip = $conn->real_escape_string($_POST['zip']);
     $country = $conn->real_escape_string($_POST['country']);
 
+    $sql = "SELECT * FROM contacts WHERE phone = '$phone'";
+    $result = $conn->query($sql);
+    $contact_num = $result->num_rows;
+    if ($contact_num > 0) {
+        echo "Contact with phone number +880$phone already exists";
+        exit;
+    }
+
     if (isset($_FILES['fileToUpload'])) {
         $image = $_FILES['fileToUpload'];
         $imageName = $image['name'];
@@ -98,8 +106,11 @@ function addContact()
         $uploadDirectory = "uploads/";
 
         // Generate a unique filename to prevent overwriting
-        $uniqueFileName = uniqid('', true) . "_" . basename($imageName);
-        $uploadPath = $uploadDirectory . $uniqueFileName;
+        $target_file = $uploadDirectory . basename($imageName);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $uniqueFileName = $phone;
+        $uploadPath = $uploadDirectory . $uniqueFileName . "." . $imageFileType;
+
 
         // Check for upload errors
         if ($imageError === 0) {
@@ -171,19 +182,15 @@ function editContact()
     $zip = $_POST['zip'];
     $country = $_POST['country'];
 
-    if (isset($_FILES['fileToUpload'])) {
+    $sql = "SELECT photo FROM contacts WHERE id=$id";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $oldPhoto = $row['photo'];
+    if (!empty($_FILES['fileToUpload']['name'])) {
+        unlink($oldPhoto);
+    }
 
-        if (!empty($_FILES['fileToUpload']['name'])) {
-            $sql = "SELECT photo FROM contacts WHERE id=$id";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                $oldPhoto = $row['photo'];
-                if ($oldPhoto) {
-                    unlink($oldPhoto);
-                }
-            }
-        }
+    if (isset($_FILES['fileToUpload'])) {
 
         $image = $_FILES['fileToUpload'];
         $imageName = $image['name'];
@@ -194,8 +201,10 @@ function editContact()
         $uploadDirectory = "uploads/";
 
         // Generate a unique filename to prevent overwriting
-        $uniqueFileName = uniqid('', true) . "_" . basename($imageName);
-        $uploadPath = $uploadDirectory . $uniqueFileName;
+        $target_file = $uploadDirectory . basename($imageName);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $uniqueFileName = $phone;
+        $uploadPath = $uploadDirectory . $uniqueFileName . "." . $imageFileType;
 
         // Check for upload errors
         if ($imageError === 0) {
@@ -206,16 +215,15 @@ function editContact()
 
             // Move the file to the upload directory
             move_uploaded_file($imageTmpName, $uploadPath);
-
-            $sql = "UPDATE contacts SET photo='$uploadPath' WHERE id=$id";
-            $result = mysqli_query($conn, $sql);
         }
+    } else {
+        $uploadPath = $oldPhoto;
     }
 
     // Update query
     $sql = "UPDATE contacts SET 
                     first_name='$firstName', last_name='$lastName', email='$email', phone='$phone',
-                    address='$address', city='$city', state='$state', zip='$zip', country='$country'
+                    address='$address', city='$city', state='$state', zip='$zip', country='$country', photo='$uploadPath'
                 WHERE id=$id";
 
     $result = mysqli_query($conn, $sql);
