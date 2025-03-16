@@ -74,12 +74,33 @@ function readContacts()
     echo json_encode($data);
 }
 
+function maleCount()
+{
+    global $conn;
+
+    $sql = "SELECT * FROM contacts WHERE gender='male'";
+    $result = $conn->query($sql);
+    $maleCount = $result->num_rows;
+    echo $maleCount;
+}
+
+function femaleCount()
+{
+    global $conn;
+
+    $sql = "SELECT * FROM contacts WHERE gender='female'";
+    $result = $conn->query($sql);
+    $femaleCount = $result->num_rows;
+    echo $femaleCount;
+}
+
 function addContact()
 {
     global $conn;
 
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
+    $gender = $conn->real_escape_string($_POST['gender']);
     $email = $conn->real_escape_string($_POST['email']);
     $phone = $conn->real_escape_string($_POST['phone']);
     $address = $conn->real_escape_string($_POST['address']);
@@ -128,8 +149,8 @@ function addContact()
 
 
     // SQL insert query
-    $sql = "INSERT INTO contacts (first_name, last_name, email, phone, address, city, state, zip, country, photo)
-            VALUES ('$firstName', '$lastName', '$email', '$phone', '$address', '$city', '$state', '$zip', '$country', '$uploadPath')";
+    $sql = "INSERT INTO contacts (first_name, last_name, email, gender, phone, address, city, state, zip, country, photo)
+            VALUES ('$firstName', '$lastName', '$email', '$gender', '$phone', '$address', '$city', '$state', '$zip', '$country', '$uploadPath')";
 
     // Execute query and check for success
     if ($conn->query($sql) === TRUE) {
@@ -174,6 +195,7 @@ function editContact()
     $id = $_POST['id'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
+    $gender = $_POST['gender'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
@@ -222,7 +244,7 @@ function editContact()
 
     // Update query
     $sql = "UPDATE contacts SET 
-                    first_name='$firstName', last_name='$lastName', email='$email', phone='$phone',
+                    first_name='$firstName', last_name='$lastName', gender='$gender', email='$email', phone='$phone',
                     address='$address', city='$city', state='$state', zip='$zip', country='$country', photo='$uploadPath'
                 WHERE id=$id";
 
