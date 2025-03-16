@@ -7,7 +7,9 @@ include "layout/header.php";
 ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
+
     <div class="wrapper">
+
         <?php
         include "layout/main-header.php";
         include "layout/sidebar.php";
@@ -15,6 +17,7 @@ include "layout/header.php";
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
@@ -30,20 +33,24 @@ include "layout/header.php";
             <!-- Main content -->
             <section class="content">
 
-                <div class="box">
-                    <div class="box-header" style="display: flex;">
-                        <h3 class="box-title">Contact Table</h3>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="addNewBtn" style="margin-left: auto;">
-                            <i class="bi bi-person-plus-fill"></i> Add New Contact
-                        </button>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body" style="overflow-x: auto;">
-                        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box">
 
-                            <div class="row">
-                                <div class="col-sm-12">
+                            <div class="box-header" style="display: flex;">
+                                <h3 class="box-title">Contact Table</h3>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="addNewBtn" style="margin-left: auto;">
+                                    <i class="bi bi-person-plus-fill"></i> Add New Contact
+                                </button>
+                            </div>
+                            <!-- /.box-header -->
+
+
+                            <div class="box-body table-responsive no-padding">
+                                <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column ascending">ID</th>
@@ -56,17 +63,18 @@ include "layout/header.php";
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">Action</th>
                                             </tr>
                                         </thead>
+
                                         <tbody id="table-body">
                                             <!-- Table data goes here -->
-
                                         </tbody>
+
                                     </table>
+
                                 </div>
                             </div>
-
+                            <!-- /.box-body -->
                         </div>
                     </div>
-                    <!-- /.box-body -->
                 </div>
 
             </section>
@@ -178,13 +186,14 @@ include "layout/header.php";
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
-                                <label>Gender</label>
+                                <label>Gender <span
+                                        class="text-danger fw-bold">*</span></label>
                                 <select class="form-control" id="gender" name="gender" required>
                                     <option value="" disabled selected>Select Gender</option>
                                     <option value="male">male</option>
                                     <option value="female">female</option>
-                                    <option value="others">others</option>
                                 </select>
+                                <div class="invalid-feedback">Please fill out this field</div>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -264,11 +273,21 @@ include "layout/header.php";
             // Hide all invalid-feedback initially
             $(".invalid-feedback").hide();
 
-            // Bind the form submission to validation
+            // When the modal is hidden, reset the form
+            $("#exampleModal").on("hidden.bs.modal", function() {
+                // Reset the form fields
+                $(this).find("form")[0].reset();
 
+                // Remove custom validation classes
+                $(this).find("form").removeClass("was-validated");
 
-
-
+                // Clear custom error messages if present
+                $(this).find(".invalid-feedback").hide();
+                $(this).find(".is-invalid").removeClass("is-invalid");
+                previewImage.src = "";
+                imagePreview.style.display = "none";
+                imageInput.value = ""; // Clear the file input
+            });
 
             // Image preview functionality (optional, based on your HTML)
             $("#imageInput").on("change", function() {
@@ -406,11 +425,9 @@ include "layout/header.php";
                         // Check if the input is valid
                         if (input[0].checkValidity()) {
                             // If valid, show green border
-                            formGroup.addClass("has-success").removeClass("has-error");
                             feedback.hide();
                         } else {
                             // If invalid, show red border and message
-                            formGroup.addClass("has-error").removeClass("has-success");
                             feedback.text(input[0].validationMessage).show();
                             isValid = false;
                         }
@@ -486,13 +503,23 @@ include "layout/header.php";
                     contentType: false,
                     success: function(response) {
                         alert(response); // Show the server's response
-                        $("#exampleModal").modal("hide");
-                        $(".needs-validation")[0].reset(); // Clear form fields
+                        $(".needs-validation")[0].reset();
+                        $("#exampleModal").modal("hide"); // Hide the modal
+                        previewImage.src = "";
+                        imagePreview.style.display = "none";
+                        imageInput.value = ""; // Clear the file input // Clear form fields
                         loadTableData(); // Refresh the table (assuming this function exists)
                     },
                     error: function(xhr, status, error) {
-                        alert("An error occurred: " + error);
-                        console.error("Error details:", status, error);
+                        // Parse the response message from the server
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            alert("Error: " + response.error); // Display the error message
+                        } catch (e) {
+                            alert("An error occurred, but the error message could not be retrieved.");
+                        }
+
+                        console.error("Error details:", xhr.responseText, status, error);
                     },
                 });
             });

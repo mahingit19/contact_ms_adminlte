@@ -132,6 +132,19 @@ function addContact()
         $uniqueFileName = $phone;
         $uploadPath = $uploadDirectory . $uniqueFileName . "." . $imageFileType;
 
+        if (
+            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif"
+        ) {
+            header('Content-Type: application/json'); // Ensure the response is JSON
+            http_response_code(400); // Set HTTP status code
+            echo json_encode([
+                "status" => 400,
+                "error" => "JPG, JPEG, PNG & GIF files are allowed."
+            ]);
+            exit;
+        }
+
 
         // Check for upload errors
         if ($imageError === 0) {
@@ -227,6 +240,19 @@ function editContact()
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $uniqueFileName = $phone;
         $uploadPath = $uploadDirectory . $uniqueFileName . "." . $imageFileType;
+
+        if (
+            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif"
+        ) {
+            header('Content-Type: application/json'); // Ensure the response is JSON
+            http_response_code(400); // Set HTTP status code
+            echo json_encode([
+                "status" => 400,
+                "error" => "JPG, JPEG, PNG & GIF files are allowed."
+            ]);
+            exit;
+        }
 
         // Check for upload errors
         if ($imageError === 0) {
