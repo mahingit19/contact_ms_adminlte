@@ -4,7 +4,7 @@
     switch (APP_URI) {
         case '/adminlte_practice01/login.php':
             $(document).ready(function() {
-
+                // Login form validation start
                 'use strict';
 
                 // Fetch all forms with the "needs-validation" class
@@ -52,7 +52,9 @@
 
                     return isValid; // Return the overall validity of the form
                 }
+                // Login form validation end
 
+                // Login form submission start
                 $('#myForm').submit(function(e) {
                     e.preventDefault(); // Prevent default form submission
 
@@ -81,25 +83,14 @@
                 });
             });
             break;
+
         case '/adminlte_practice01/contact-list.php':
             // jquery scripts starts
             $(document).ready(function() {
 
-                //sidebar scripts starts
-                // Get the current URL path
-                var currentPath = window.location.href;
-
-                // Loop through all <a> tags in the menu and check their href
-                $(".sidebar-menu .menu-links a").each(function() {
-                    if ($(this).attr("href") === currentPath) {
-                        // Add active class to the parent <li> if href matches the current path
-                        $(this).parent("li").addClass("active");
-                    }
-                });
-                //sidebar scripts ends
-
                 //contact-list scripts starts
-                // Load table data using AJAX
+
+                // Load table data using AJAX start
                 function loadTableData() {
                     $.ajax({
                         url: window.location.href, // Path to your PHP script
@@ -108,7 +99,8 @@
                             action: "readContacts",
                         },
                         dataType: "json",
-                        success: function(data) {
+                        success: function(response) {
+                            let data = response.data;
                             let rows = "";
                             data.forEach((item) => {
                                 rows += `<tr>
@@ -137,6 +129,7 @@
                 }
 
                 loadTableData(); // Load table data on page load
+                // Load table data using AJAX end
 
                 // Use event delegation for delete buttons
                 $(document).on("click", ".delete-btn", function() {
@@ -151,9 +144,15 @@
                                 action: "deleteContact",
                             },
                             success: function(response) {
-                                alert("Data deleted successfully: " + response);
-                                button.closest("tr").remove(); // Remove the row from the table
-                                loadTableData(); // Refresh the table
+                                if (response.status === "success") {
+                                    alert(response.message);
+                                    button.closest("tr").remove(); // Remove the row from the table
+                                    loadTableData(); // Refresh the table
+                                }
+                                else {
+                                    alert("Data not deleted: " + response);
+                                }
+
                             },
                             error: function(xhr, status, error) {
                                 alert("An error occurred: " + error);
@@ -183,6 +182,72 @@
                     imagePreview.style.display = "none";
                     imageInput.value = ""; // Clear the file input
                 });
+
+                // drag and drop scripts starts
+                const uploadArea = document.getElementById("uploadArea");
+                const imageInput = document.getElementById("imageInput");
+                const imagePreview = document.getElementById("imagePreview");
+                const previewImage = document.getElementById("previewImage");
+                const removeButton = document.getElementById("removeButton");
+                const fullscreenDrop = document.getElementById("fullscreenDrop");
+
+                // Handle click on upload area
+                uploadArea.addEventListener("click", () => imageInput.click());
+
+                // Handle fullscreen drag and drop
+                window.addEventListener("dragover", (event) => {
+                    event.preventDefault();
+                    fullscreenDrop.classList.add("active");
+                });
+
+                window.addEventListener("dragleave", (event) => {
+                    if (!event.relatedTarget || event.relatedTarget === document.body) {
+                        fullscreenDrop.classList.remove("active");
+                    }
+                });
+
+                window.addEventListener("drop", (event) => {
+                    event.preventDefault();
+                    fullscreenDrop.classList.remove("active");
+                    const file = event.dataTransfer.files[0];
+                    if (file) {
+                        handleFile(file);
+                        updateFileInput(file);
+                    }
+                });
+
+                // Handle file input change
+                imageInput.addEventListener("change", () => {
+                    const file = imageInput.files[0];
+                    handleFile(file);
+                });
+
+                // Function to display preview
+                function handleFile(file) {
+                    if (file && file.type.startsWith("image/")) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            previewImage.src = reader.result;
+                            imagePreview.style.display = "block";
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+
+                // Function to update the file input field programmatically
+                function updateFileInput(file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    imageInput.files = dataTransfer.files;
+                }
+
+                // Handle remove button click
+                removeButton.addEventListener("click", () => {
+                    previewImage.src = "";
+                    imagePreview.style.display = "none";
+                    imageInput.value = ""; // Clear the file input
+                });
+                // drag and drop scripts ends
 
                 // Image preview functionality (optional, based on your HTML)
                 $("#imageInput").on("change", function() {
@@ -248,19 +313,16 @@
 
                     // Handle the image preview
                     if (rowData.imagePath) {
+                        $("#imagePreview").show(); // Show the image preview container
                         $("#previewImage").attr("src", rowData.imagePath).show(); // Show existing image
                         $("#removeButton").show(); // Show the remove button
                     } else {
+                        imageInput.value = ""; // Clear the file input
                         $("#previewImage").hide();
                         $("#removeButton").hide();
                     }
 
                     $("#exampleModal").modal("show"); // Show the modal
-                });
-                // Remove image button functionality
-                $(document).on("click", "#removeButton", function() {
-                    $("#previewImage").hide().attr("src", ""); // Clear the preview image
-                    $("#imageInput").val(""); // Clear the input field
                 });
 
                 // Handle form submission (Add or Edit)
@@ -294,36 +356,22 @@
 
                     // Phone number validation
                     if (!phoneRegex.test(phoneInput)) {
-                        // If phone number is invalid
-                        $("#phone")
-                            .closest(".form-group")
-                            .addClass("has-error")
-                            .removeClass("has-success");
                         $("#phone")
                             .next(".invalid-feedback")
                             .text("Phone number must be exactly 10 digits.")
                             .show();
                         isValid = false;
                     } else {
-                        // If phone number is valid
-                        $("#phone")
-                            .closest(".form-group")
-                            .addClass("has-success")
-                            .removeClass("has-error");
                         $("#phone").next(".invalid-feedback").hide();
                     }
 
                     if (!isValid) {
-                        form.classList.add("was-validated"); // Trigger feedback for invalid form
                         return; // Stop execution
                     }
 
                     // Proceed with form submission or AJAX logic
                     const action = $(this).data("action");
-                    const url =
-                        action === "add" ?
-                        window.location.href :
-                        window.location.href;
+                    const url = window.location.href; // Replace with your API endpoint
 
                     let myAction;
                     if (action === "edit") {
@@ -361,13 +409,17 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            alert(response); // Show the server's response
-                            $(".needs-validation")[0].reset();
-                            $("#exampleModal").modal("hide"); // Hide the modal
-                            previewImage.src = "";
-                            imagePreview.style.display = "none";
-                            imageInput.value = ""; // Clear the file input // Clear form fields
-                            loadTableData(); // Refresh the table (assuming this function exists)
+                            if (response.status === "success") {
+                                alert(response.message); // Show the server's response
+                                $(".needs-validation")[0].reset();
+                                $("#exampleModal").modal("hide"); // Hide the modal
+                                previewImage.src = "";
+                                imagePreview.style.display = "none";
+                                imageInput.value = ""; // Clear the file input // Clear form fields
+                                loadTableData(); // Refresh the table (assuming this function exists)
+                            } else {
+                                alert(response.message);
+                            }
                         },
                         error: function(xhr, status, error) {
                             // Parse the response message from the server
@@ -383,97 +435,15 @@
                     });
                 });
 
-
-
-                const uploadArea = document.getElementById("uploadArea");
-                const imageInput = document.getElementById("imageInput");
-                const imagePreview = document.getElementById("imagePreview");
-                const previewImage = document.getElementById("previewImage");
-                const removeButton = document.getElementById("removeButton");
-                const fullscreenDrop = document.getElementById("fullscreenDrop");
-
-                // Handle click on upload area
-                uploadArea.addEventListener("click", () => imageInput.click());
-
-                // Handle fullscreen drag and drop
-                window.addEventListener("dragover", (event) => {
-                    event.preventDefault();
-                    fullscreenDrop.classList.add("active");
-                });
-
-                window.addEventListener("dragleave", (event) => {
-                    if (!event.relatedTarget || event.relatedTarget === document.body) {
-                        fullscreenDrop.classList.remove("active");
-                    }
-                });
-
-                window.addEventListener("drop", (event) => {
-                    event.preventDefault();
-                    fullscreenDrop.classList.remove("active");
-                    const file = event.dataTransfer.files[0];
-                    if (file) {
-                        handleFile(file);
-                        updateFileInput(file);
-                    }
-                });
-
-                // Handle file input change
-                imageInput.addEventListener("change", () => {
-                    const file = imageInput.files[0];
-                    handleFile(file);
-                });
-
-                // Function to display preview
-                function handleFile(file) {
-                    if (file && file.type.startsWith("image/")) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                            previewImage.src = reader.result;
-                            imagePreview.style.display = "block";
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                }
-
-                // Function to update the file input field programmatically
-                function updateFileInput(file) {
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    imageInput.files = dataTransfer.files;
-                }
-
-                // Handle remove button click
-                removeButton.addEventListener("click", () => {
-                    previewImage.src = "";
-                    imagePreview.style.display = "none";
-                    imageInput.value = ""; // Clear the file input
-                });
                 //form modal scripts ends
 
-                //logout scripts starts
-                $('#logout').click(function() {
-                    $.ajax({
-                        url: window.location.href,
-                        method: 'POST',
-                        data: {
-                            action: 'logout'
-                        },
-                        success: function(response) {
-                            window.location.href = 'login.php';
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error:', error);
-                        }
-                    });
-                });
-                //logout scripts ends
             });
             //jquery scripts ends
             break;
         default:
 
             //jquery scripts starts
-            $(document).ready(function () {
+            $(document).ready(function() {
                 //dashboard ajax scripts starts
                 $.ajax({
                     url: window.location.href, // Replace with your API endpoint
@@ -484,8 +454,8 @@
                     },
                     success: function(response) {
                         // Check if the response is an array
-                        if (Array.isArray(response)) {
-                            let rowCount = response.length; // Get the number of rows
+                        if (Array.isArray(response.data)) {
+                            let rowCount = response.data.length; // Get the number of rows
                             console.log('Number of rows:', rowCount);
                             document.getElementById('contact-num').innerHTML = rowCount;
                         } else {
@@ -552,4 +522,41 @@
             //pie chart scripts ends
             break;
     }
+
+    //common scripts starts
+    if (APP_URI !== "/adminlte_practice01/login.php") {
+        $(document).ready(function() {
+
+            // Get the current URL path
+            var currentPath = window.location.href;
+
+            // Loop through all <a> tags in the menu and check their href
+            $(".sidebar-menu .menu-links a").each(function() {
+                if ($(this).attr("href") === currentPath) {
+                    // Add active class to the parent <li> if href matches the current path
+                    $(this).parent("li").addClass("active");
+                }
+            });
+
+            //logout scripts starts
+            $('#logout').click(function() {
+                $.ajax({
+                    url: window.location.href,
+                    method: 'POST',
+                    data: {
+                        action: 'logout'
+                    },
+                    success: function(response) {
+                        window.location.href = 'login.php';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+            //logout scripts ends
+
+        });
+    }
+    //common scripts ends
 </script>

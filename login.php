@@ -2,6 +2,17 @@
 
 require_once "includes/functions.php";
 
+if (isset($_POST['email']) && isset($_POST['password'])) {
+  if (empty($_POST['email']) || empty($_POST['password'])) {
+      response('error','Please fill in all fields');
+      exit;
+  }
+  $email = $_POST["email"];
+  $password = $_POST["password"];
+  login($email, $password);
+  exit;
+}
+
 include "layout/header.php" ;
 
 ?>

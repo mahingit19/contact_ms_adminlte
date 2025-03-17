@@ -21,6 +21,18 @@ switch ($_SERVER['REQUEST_URI']) {
         break;
 }
 
+function response($status, $message, $data = []) {
+    header('Content-Type: application/json');
+    $response = array(
+        'status' => $status,
+        'message' => $message,
+        'data' => $data
+    );
+
+    echo json_encode($response);
+    exit;
+}
+
 // Connect to the database
 function db_connect()
 {
@@ -46,13 +58,13 @@ function login($email, $password)
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $password;
             $_SESSION["username"] = $row["username"];
-            echo json_encode(['status' => 'success']);
+            response("success", "logged in successfully");
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
+            response("error","Invalid email or password");
         }
         exit;
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
+        response("error","Invalid email or password");
         exit;
     }
 }
@@ -71,7 +83,7 @@ function readContacts()
             $data[] = $row;
         }
     }
-    echo json_encode($data);
+    response("success", "contact found", $data);
 }
 
 function genderCount($genderName)
@@ -104,7 +116,7 @@ function addContact()
     $result = $conn->query($sql);
     $contact_num = $result->num_rows;
     if ($contact_num > 0) {
-        echo "Contact with phone number +880$phone already exists";
+        response("error","Contact with phone number +880$phone already exists");
         exit;
     }
 
@@ -127,12 +139,7 @@ function addContact()
             $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
         ) {
-            header('Content-Type: application/json'); // Ensure the response is JSON
-            http_response_code(400); // Set HTTP status code
-            echo json_encode([
-                "status" => 400,
-                "error" => "JPG, JPEG, PNG & GIF files are allowed."
-            ]);
+            response("error","JPG, JPEG, PNG & GIF files are allowed.");
             exit;
         }
 
@@ -158,9 +165,9 @@ function addContact()
 
     // Execute query and check for success
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully.";
+        response("success","New record created successfully.");
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        response("error","Error: " . $sql . "<br>" . $conn->error);
     }
 
 }
@@ -206,12 +213,7 @@ function editContact()
             $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
         ) {
-            header('Content-Type: application/json'); // Ensure the response is JSON
-            http_response_code(400); // Set HTTP status code
-            echo json_encode([
-                "status" => 400,
-                "error" => "JPG, JPEG, PNG & GIF files are allowed."
-            ]);
+            response("error","JPG, JPEG, PNG & GIF files are allowed.");
             exit;
         }
 
@@ -241,9 +243,9 @@ function editContact()
 
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        echo "Record updated successfully for id: $id";
+        response("success","Record updated successfully for id: $id");
     } else {
-        echo "Error updating record: " . mysqli_error($conn);
+        response("error","Error updating record: " . mysqli_error($conn));
     }
 }
 
@@ -268,9 +270,9 @@ function deleteContact()
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            echo "ID: $id deleted successfully";
+            response("success","Record deleted successfully for id: $id");
         } else {
-            echo "Error deleting record: " . mysqli_error($conn);
+            response("error","Error deleting record: ". mysqli_error($conn));
         }
     }
 }
@@ -278,19 +280,6 @@ function deleteContact()
 function logout() 
 {
     session_destroy();
-    exit;
-}
-
-if (isset($_POST['email']) && isset($_POST['password'])) {
-    if (empty($_POST['email']) || empty($_POST['password'])) {
-        echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
-        exit;
-    }
-    // Send JSON response
-    header('Content-Type: application/json');
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    login($email, $password);
     exit;
 }
 
@@ -319,8 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action'])) {
 
         default:
             // Handle invalid actions
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid action']);
+            response('error','Invalid action');
             break;
     }
     exit;

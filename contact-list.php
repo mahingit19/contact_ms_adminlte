@@ -186,7 +186,7 @@ include "layout/header.php";
                             <div class="image-preview" id="imagePreview" style="display: none;">
                                 <button type="button" class="btn-close remove-button" id="removeButton"
                                     aria-label="Remove">X</button>
-                                <img src="" id="previewImage" class="img-fluid" alt="Preview">
+                                <img id="previewImage" class="img-fluid" alt="Preview">
                             </div>
                         </div>
                 </div>
