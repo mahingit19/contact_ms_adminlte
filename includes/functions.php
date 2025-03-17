@@ -39,6 +39,7 @@ function login($email, $password)
 
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = $conn->query($sql);
+
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row["password"])) {
@@ -51,7 +52,6 @@ function login($email, $password)
         }
         exit;
     } else {
-
         echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
         exit;
     }
@@ -74,24 +74,15 @@ function readContacts()
     echo json_encode($data);
 }
 
-function maleCount()
+function genderCount($genderName)
 {
     global $conn;
 
-    $sql = "SELECT * FROM contacts WHERE gender='male'";
+    $sql = "SELECT * FROM contacts WHERE gender='$genderName'";
     $result = $conn->query($sql);
-    $maleCount = $result->num_rows;
-    echo $maleCount;
-}
+    $genderCount = $result->num_rows;
 
-function femaleCount()
-{
-    global $conn;
-
-    $sql = "SELECT * FROM contacts WHERE gender='female'";
-    $result = $conn->query($sql);
-    $femaleCount = $result->num_rows;
-    echo $femaleCount;
+    echo $genderCount;
 }
 
 function addContact()
@@ -171,34 +162,7 @@ function addContact()
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
-}
 
-function deleteContact()
-{
-    global $conn;
-
-    if (isset($_POST["id"])) {
-        $id = $_POST["id"];
-
-        $sql = "SELECT photo FROM contacts WHERE id = $id";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $photoPath = $row["photo"];
-            if (file_exists($photoPath)) {
-                unlink($photoPath);
-            }
-        }
-
-        $sql = "DELETE FROM contacts WHERE id = $id";
-        $result = mysqli_query($conn, $sql);
-
-        if ($result) {
-            echo "ID: $id deleted successfully";
-        } else {
-            echo "Error deleting record: " . mysqli_error($conn);
-        }
-    }
 }
 
 function editContact()
@@ -206,16 +170,16 @@ function editContact()
     global $conn;
 
     $id = $_POST['id'];
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $gender = $_POST['gender'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $zip = $_POST['zip'];
-    $country = $_POST['country'];
+    $firstName = $conn->real_escape_string($_POST['firstName']);
+    $lastName = $conn->real_escape_string($_POST['lastName']);
+    $gender = $conn->real_escape_string($_POST['gender']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $phone = $conn->real_escape_string($_POST['phone']);
+    $address = $conn->real_escape_string($_POST['address']);
+    $city = $conn->real_escape_string($_POST['city']);
+    $state = $conn->real_escape_string($_POST['state']);
+    $zip = $conn->real_escape_string($_POST['zip']);
+    $country = $conn->real_escape_string($_POST['country']);
 
     $sql = "SELECT photo FROM contacts WHERE id=$id";
     $result = mysqli_query($conn, $sql);
@@ -283,6 +247,40 @@ function editContact()
     }
 }
 
+function deleteContact()
+{
+    global $conn;
+
+    if (isset($_POST["id"])) {
+        $id = $_POST["id"];
+
+        $sql = "SELECT photo FROM contacts WHERE id = $id";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $photoPath = $row["photo"];
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+        }
+
+        $sql = "DELETE FROM contacts WHERE id = $id";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            echo "ID: $id deleted successfully";
+        } else {
+            echo "Error deleting record: " . mysqli_error($conn);
+        }
+    }
+}
+
+function logout() 
+{
+    session_destroy();
+    exit;
+}
+
 if (isset($_POST['email']) && isset($_POST['password'])) {
     if (empty($_POST['email']) || empty($_POST['password'])) {
         echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
@@ -313,6 +311,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action'])) {
 
         case 'deleteContact':
             deleteContact();
+            break;
+
+        case 'logout':
+            logout();
             break;
 
         default:

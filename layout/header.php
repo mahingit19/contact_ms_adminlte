@@ -3,11 +3,14 @@
 <html>
 
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Contact Management System</title>
-  <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <title>Contact Management System</title>
+
+  
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -23,40 +26,13 @@
         apply the skin class to the body tag so the changes take effect.
   -->
   <link rel="stylesheet" href="assets/dist/css/skins/skin-blue.min.css">
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/custom/css/style.css">
+  <!-- Bootstrap icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-
-  <!-- jQuery 2.2.0 -->
-<script src="assets/plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<!-- FLOT CHARTS -->
-<script src="assets/plugins/flot/jquery.flot.min.js"></script>
-<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
-<script src="assets/plugins/flot/jquery.flot.resize.min.js"></script>
-<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-<script src="assets/plugins/flot/jquery.flot.pie.min.js"></script>
-<!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
-<script src="assets/plugins/flot/jquery.flot.categories.min.js"></script>
-<!-- AdminLTE App -->
-<script src="assets/dist/js/app.min.js"></script>
-<!-- iCheck -->
-<script src="assets/plugins/iCheck/icheck.min.js"></script>
-<!-- FastClick -->
-<script src="assets/plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="assets/dist/js/demo.js"></script>
-<!-- ChartJS 1.0.1 -->
-<script src="assets/plugins/chartjs/Chart.min.js"></script>
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 </head>
+
 <!--
 BODY TAG OPTIONS:
 =================
