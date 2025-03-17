@@ -237,6 +237,7 @@
                     $("#formId").val(rowData.id); // Set the ID value
                     $("#firstName").val(rowData.firstName); // Populate form fields
                     $("#lastName").val(rowData.lastName);
+                    $("#gender").val(rowData.gender);
                     $("#email").val(rowData.email);
                     $("#phone").val(rowData.phone);
                     $("#address").val(rowData.address);
