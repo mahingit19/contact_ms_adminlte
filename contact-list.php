@@ -39,6 +39,7 @@ include "layout/header.php";
 
                             <div class="box-header" style="display: flex;">
                                 <h3 class="box-title">Contact Table</h3>
+                                <input id="mySearch" type="text" placeholder="search anything..." style="margin-left: auto;">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="addNewBtn" style="margin-left: auto;">
                                     <i class="bi bi-person-plus-fill"></i> Add New Contact
                                 </button>

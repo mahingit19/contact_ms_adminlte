@@ -131,6 +131,15 @@
                 loadTableData(); // Load table data on page load
                 // Load table data using AJAX end
 
+                // jquery search starts
+                $("#mySearch").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#table-body tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+                // jquery search ends
+
                 // Use event delegation for delete buttons
                 $(document).on("click", ".delete-btn", function() {
                     const button = $(this); // Reference to the clicked button
@@ -148,8 +157,7 @@
                                     alert(response.message);
                                     button.closest("tr").remove(); // Remove the row from the table
                                     loadTableData(); // Refresh the table
-                                }
-                                else {
+                                } else {
                                     alert("Data not deleted: " + response);
                                 }
 
