@@ -22,8 +22,8 @@
   <script src="assets/plugins/chartjs/Chart.min.js"></script>
 
   <!-- Custom JS -->
-  <?php include "assets/custom/js/script.php"; ?>
+  <script src="assets/custom/js/script.js"></script>
 
-</body>
+  </body>
 
-</html>
+  </html>
