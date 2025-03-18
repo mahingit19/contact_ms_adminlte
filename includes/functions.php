@@ -58,11 +58,11 @@ function login($email, $password)
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $password;
             $_SESSION["username"] = $row["username"];
-            response("success", "logged in successfully");
+            response("success", APP_URI . "/");
+            exit;
         } else {
             response("error","Invalid email or password");
         }
-        exit;
     } else {
         response("error","Invalid email or password");
         exit;

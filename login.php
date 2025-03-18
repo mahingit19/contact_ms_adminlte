@@ -82,7 +82,7 @@ include "layout/header.php";
       function validateForm(form) {
         let isValid = true;
 
-        form.find('input, textarea, select').each(function() {
+        form.find('input').each(function() {
           const input = $(this);
           const formGroup = input.closest('.form-group');
 
@@ -119,7 +119,7 @@ include "layout/header.php";
           success: function(response) {
             if (response.status === 'success') {
               // Login successful - Redirect to another page
-              window.location.href = "/adminlte_practice01/"; // Replace with your target page
+              window.location.href = response.message; // Replace with your target page
             } else if (response.status === 'error') {
               // Display error message
               $('#errorMessage').text(response.message).show();
