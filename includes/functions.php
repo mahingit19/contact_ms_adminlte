@@ -94,7 +94,7 @@ function genderCount($genderName)
     $result = $conn->query($sql);
     $genderCount = $result->num_rows;
 
-    echo $genderCount;
+    return $genderCount;
 }
 
 function addContact()
