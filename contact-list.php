@@ -453,8 +453,6 @@ include "layout/header.php";
                 event.preventDefault(); // Prevent form's default behavior
 
                 const form = $(".needs-validation")[0]; // Select the form
-                // const phoneInput = $("#phone").val(); // Get the phone input value
-                // const phoneRegex = /^\d{10}$/; // Regular expression for exactly 10 digits
 
                 let isValid = true; // Track overall validity
 
@@ -477,6 +475,8 @@ include "layout/header.php";
                         }
                     });
 
+
+                //phone validation starts
                 function validatePhoneNumber(number) {
                     const validOps = ["12", "13", "14", "15", "16", "17", "18", "19"];
 
@@ -531,6 +531,23 @@ include "layout/header.php";
                         .show();
                     isValid = false;
                     }
+
+                //phone validation ends
+
+                // email validation starts
+                const email = $("#email").val();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (emailRegex.test(email)) {
+                    $("#email").next(".invalid-feedback").hide();
+                } else {
+                    $("#email")
+                        .next(".invalid-feedback")
+                        .text("email is not valid use this format: someone@domain.com")
+                        .show();
+                        isValid = false
+                }
+                // email validation ends
 
                 if (!isValid) {
                     return; // Stop execution
