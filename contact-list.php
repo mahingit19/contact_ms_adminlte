@@ -403,48 +403,48 @@ include "layout/header.php";
 
             // Show form for "Edit"
             $(document).on("click", ".edit-btn", function() {
-                
+
                 const row = $(this).closest("tr");
                 const rowData = {
                     id: row.find(".id").text(), // Assuming the table row has a class "id" for the ID
-                    firstName: row.find(".first-name").text(), // Row data
-                    lastName: row.find(".last-name").text(),
-                    gender: row.find(".gender").text(),
-                    email: row.find(".email").text(),
-                    phone: row.find(".phone").text(),
-                    address: row.find(".address").text(),
-                    city: row.find(".city").text(),
-                    state: row.find(".state").text(),
-                    zip: row.find(".zip").text(),
-                    country: row.find(".country").text(),
-                    imagePath: row.find(".image-path").data(
-                        "src"), // Assuming the image path is stored in a data attribute
                 };
+                $.ajax({
+                    url: window.location.href, // PHP script to handle the data
+                    type: "POST",
+                    data: {
+                        id: rowData.id,
+                        action: "getContact",
+                    },
+                    success: function(response) {
+                        if (response.status === "success") {
+                            const data = response.data;
+                            $("#formId").val(data.id); // Set the ID value
+                            $("#firstName").val(data.first_name); // Populate form fields
+                            $("#lastName").val(data.last_name);
+                            $("#gender").val(data.gender);
+                            $("#email").val(data.email);
+                            $("#phone").val(data.phone);
+                            $("#address").val(data.address);
+                            $("#city").val(data.city);
+                            $("#state").val(data.state);
+                            $("#zip").val(data.zip);
+                            $("#country").val(data.country);
+                            // Handle the image preview
+                            if (data.photo) {
+                                $("#imagePreview").show(); // Show the image preview container
+                                $("#previewImage").attr("src", data.photo).show(); // Show existing image
+                                $("#removeButton").show(); // Show the remove button
+                            } else {
+                                imageInput.value = ""; // Clear the file input
+                                $("#previewImage").hide();
+                                $("#removeButton").hide();
+                            }
+                        }
+                    }
+                });
 
                 $("#exampleModalLabel").text("Edit Record"); // Update modal title
                 $("#submit-button").text("Update").data("action", "edit"); // Set action to "edit"
-                $("#formId").val(rowData.id); // Set the ID value
-                $("#firstName").val(rowData.firstName); // Populate form fields
-                $("#lastName").val(rowData.lastName);
-                $("#gender").val(rowData.gender);
-                $("#email").val(rowData.email);
-                $("#phone").val(rowData.phone);
-                $("#address").val(rowData.address);
-                $("#city").val(rowData.city);
-                $("#state").val(rowData.state);
-                $("#zip").val(rowData.zip);
-                $("#country").val(rowData.country);
-
-                // Handle the image preview
-                if (rowData.imagePath) {
-                    $("#imagePreview").show(); // Show the image preview container
-                    $("#previewImage").attr("src", rowData.imagePath).show(); // Show existing image
-                    $("#removeButton").show(); // Show the remove button
-                } else {
-                    imageInput.value = ""; // Clear the file input
-                    $("#previewImage").hide();
-                    $("#removeButton").hide();
-                }
 
                 $("#exampleModal").modal("show"); // Show the modal
             });
@@ -520,18 +520,18 @@ include "layout/header.php";
                         }
                     }
                 }
-                
-                    const phoneInput = $.trim($("#phone").val());
 
-                    if (validatePhoneNumber(phoneInput)) {
-                        $("#phone").next(".invalid-feedback").hide();
-                    } else {
-                        $("#phone")
+                const phoneInput = $.trim($("#phone").val());
+
+                if (validatePhoneNumber(phoneInput)) {
+                    $("#phone").next(".invalid-feedback").hide();
+                } else {
+                    $("#phone")
                         .next(".invalid-feedback")
                         .text("Phone number must be start with +880 or 880 or 0 or only 10 digits. Use Bangladesh valid format.")
                         .show();
                     isValid = false;
-                    }
+                }
 
                 //phone validation ends
 
@@ -546,7 +546,7 @@ include "layout/header.php";
                         .next(".invalid-feedback")
                         .text("email is not valid use this format: someone@domain.com")
                         .show();
-                        isValid = false
+                    isValid = false
                 }
                 // email validation ends
 

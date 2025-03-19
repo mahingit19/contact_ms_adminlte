@@ -86,6 +86,17 @@ function readContacts()
     response("success", "contact found", $data);
 }
 
+function getContact($id) {
+
+    global $conn;
+
+    $sql = "SELECT * FROM contacts WHERE id = $id";
+    $result = $conn->query($sql);
+    $contact = $result->fetch_assoc();
+    
+    response("success","", $contact);
+}
+
 function genderCount($genderName)
 {
     global $conn;
@@ -331,6 +342,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action'])) {
         case 'readContacts':
             header('Content-Type: application/json');
             readContacts();
+            break;
+
+        case 'getContact':
+            getContact($_POST['id']);
             break;
 
         case 'editContact':
