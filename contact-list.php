@@ -208,15 +208,13 @@ include "layout/header.php";
 
     <script>
         "use strict";
-        // jquery scripts starts
+        // jquery scripts starts ---------------------------------------
         $(document).ready(function() {
 
-            //contact-list scripts starts
-
-            // Load table data using AJAX start
+            // Load table data using AJAX start ---------------------
             function loadTableData() {
                 $.ajax({
-                    url: window.location.href, // Path to your PHP script
+                    url: window.location.href,
                     method: "POST",
                     data: {
                         action: "readContacts",
@@ -251,19 +249,19 @@ include "layout/header.php";
                 });
             }
 
-            loadTableData(); // Load table data on page load
-            // Load table data using AJAX end
+            loadTableData();
+            // Load table data using AJAX end ----------------------
 
-            // jquery search starts
+            // jquery search starts -----------------------------
             $("#mySearch").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#table-body tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            // jquery search ends
+            // jquery search ends ----------------------------------
 
-            // Use event delegation for delete buttons
+            // Delete function --------------------------------------
             $(document).on("click", ".delete-btn", function() {
                 const button = $(this); // Reference to the clicked button
                 const id = button.data("id");
@@ -290,11 +288,11 @@ include "layout/header.php";
                     });
                 }
             });
-            //contact-list scripts ends
+            // Delete function ends --------------------------------
 
-            //form modal scripts starts
+            //form modal scripts starts-------------------------------
 
-            // When the modal is hidden, reset the form
+            // When the modal is hidden, reset the form------
             $("#exampleModal").on("hidden.bs.modal", function() {
                 // Reset the form fields
                 $(this).find("form")[0].reset();
@@ -305,8 +303,9 @@ include "layout/header.php";
                 imagePreview.style.display = "none";
                 imageInput.value = ""; // Clear the file input
             });
+            // end of modal hidden----------------
 
-            // drag and drop scripts starts
+            // drag and drop scripts starts-----------------------------
             const uploadArea = document.getElementById("uploadArea");
             const imageInput = document.getElementById("imageInput");
             const imagePreview = document.getElementById("imagePreview");
@@ -370,7 +369,7 @@ include "layout/header.php";
                 imagePreview.style.display = "none";
                 imageInput.value = ""; // Clear the file input
             });
-            // drag and drop scripts ends
+            // drag and drop scripts ends ---------------------------
 
             // Image preview functionality (optional, based on your HTML)
             $("#imageInput").on("change", function() {
@@ -401,15 +400,15 @@ include "layout/header.php";
                 $("#exampleModal").modal("show"); // Show the modal
             });
 
-            // Show form for "Edit"
+            // Show form for "Edit" ---------------------------------------------------
             $(document).on("click", ".edit-btn", function() {
 
                 const row = $(this).closest("tr");
                 const rowData = {
-                    id: row.find(".id").text(), // Assuming the table row has a class "id" for the ID
+                    id: row.find(".id").text(),
                 };
                 $.ajax({
-                    url: window.location.href, // PHP script to handle the data
+                    url: window.location.href,
                     type: "POST",
                     data: {
                         id: rowData.id,
@@ -449,7 +448,7 @@ include "layout/header.php";
                 $("#exampleModal").modal("show"); // Show the modal
             });
 
-            // Handle form submission (Add or Edit)
+            // Handle form submission (Add or Edit) ----------------------------------------
             $(document).on("click", "#submit-button", function(event) {
                 event.preventDefault(); // Prevent form's default behavior
 
@@ -477,7 +476,7 @@ include "layout/header.php";
                     });
 
 
-                //phone validation starts
+                //phone validation starts -----------------------------------------------
                 function validatePhoneNumber(number) {
                     const validOps = ["12", "13", "14", "15", "16", "17", "18", "19"];
 
@@ -533,9 +532,9 @@ include "layout/header.php";
                     isValid = false;
                 }
 
-                //phone validation ends
+                //phone validation ends -----------------------------------------------
 
-                // email validation starts
+                // email validation starts ----------------------------------------------
                 const email = $("#email").val();
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -548,13 +547,13 @@ include "layout/header.php";
                         .show();
                     isValid = false
                 }
-                // email validation ends
+                // email validation ends ----------------------------------------------------
 
                 if (!isValid) {
                     return; // Stop execution
                 }
 
-                // Proceed with form submission or AJAX logic
+                // Proceed with form submission or AJAX logic ----------------------------------------
                 const action = $(this).data("action");
                 const url = window.location.href; // Replace with your API endpoint
 
@@ -567,19 +566,8 @@ include "layout/header.php";
                     myAction = "addContact";
                 }
 
-                const formData = new FormData();
+                const formData = new FormData(form);
 
-                formData.append("id", $("#formId").val());
-                formData.append("firstName", $("#firstName").val());
-                formData.append("lastName", $("#lastName").val());
-                formData.append("gender", $("#gender").val());
-                formData.append("email", $("#email").val());
-                formData.append("phone", $("#phone").val());
-                formData.append("address", $("#address").val());
-                formData.append("city", $("#city").val());
-                formData.append("state", $("#state").val());
-                formData.append("zip", $("#zip").val());
-                formData.append("country", $("#country").val());
                 formData.append("action", myAction);
 
                 const file = $("#imageInput")[0].files[0];
@@ -620,8 +608,7 @@ include "layout/header.php";
                 });
             });
 
-            //form modal scripts ends
+            //form modal scripts ends --------------------------------
 
         });
-        //jquery scripts ends
     </script>

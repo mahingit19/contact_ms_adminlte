@@ -5,6 +5,18 @@ require_once("config.php");
 
 session_start();
 
+// Get the protocol (HTTP or HTTPS)
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+
+// Get the host (domain name)
+$host = $_SERVER['HTTP_HOST'];
+
+// Get the request URI (path and query string)
+$requestUri = $_SERVER['REQUEST_URI'];
+
+// Combine them to form the full URL
+$fullUrl = $protocol . $host . $requestUri;
+
 // Redirect to login page if not logged in
 switch ($_SERVER['REQUEST_URI']) {
     case "/adminlte_practice01/login.php":
@@ -340,7 +352,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['action'])) {
             break;
 
         case 'readContacts':
-            header('Content-Type: application/json');
             readContacts();
             break;
 
