@@ -18,8 +18,8 @@ $requestUri = $_SERVER['REQUEST_URI'];
 $fullUrl = $protocol . $host . $requestUri;
 
 // Redirect to login page if not logged in
-switch ($_SERVER['REQUEST_URI']) {
-    case "/adminlte_practice01/login.php":
+switch ($fullUrl) {
+    case APP_URI . "/login.php":
         if (isset($_SESSION["email"]) && isset($_SESSION["password"])) {
             header("Location: " . APP_URI . "/");
             exit;
