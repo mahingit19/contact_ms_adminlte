@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Validation</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <form id="emailForm">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+        <button type="submit">Submit</button>
+    </form>
+    <p id="message" style="color: red;"></p>
+
+    <script>
+        $(document).ready(function() {
+            $("#emailForm").on("submit", function(event) {
+                event.preventDefault();
+
+                var email = $("#email").val();
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (emailRegex.test(email)) {
+                    $("#message").text("Valid email address!").css("color", "green");
+                } else {
+                    $("#message").text("Invalid email address!").css("color", "red");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

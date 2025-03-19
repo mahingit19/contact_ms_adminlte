@@ -39,8 +39,8 @@ include "layout/header.php";
 
                             <div class="box-header" style="display: flex;">
                                 <h3 class="box-title">Contact Table</h3>
-                                <input id="mySearch" type="text" placeholder="search anything..." style="margin-left: auto;">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="addNewBtn" style="margin-left: auto;">
+                                <input id="mySearch" class="form-control" type="text" placeholder="search anything..." style="margin-left: auto;margin-right: 10px;width:300px;">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="addNewBtn">
                                     <i class="bi bi-person-plus-fill"></i> Add New Contact
                                 </button>
                             </div>
@@ -97,7 +97,10 @@ include "layout/header.php";
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Registration Form</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel"></h4>
                 </div>
                 <div class="modal-body">
                     <form class="needs-validation" novalidate>
@@ -108,14 +111,14 @@ include "layout/header.php";
                                         class="text-danger fw-bold">*</span></label>
                                 <input type="text" class="form-control" id="firstName" name="firstName"
                                     placeholder="Enter your first name" required>
-                                <div class="invalid-feedback">Please enter your first name.</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-md-6">
                                 <label for="lastName" class="form-label">Last Name <span
                                         class="text-danger fw-bold">*</span></label>
                                 <input type="text" class="form-control" id="lastName" name="lastName"
                                     placeholder="Enter your last name" required>
-                                <div class="invalid-feedback">Please enter your last name.</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -127,51 +130,50 @@ include "layout/header.php";
                                     <option value="male">male</option>
                                     <option value="female">female</option>
                                 </select>
-                                <div class="invalid-feedback">Please fill out this field</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
-                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone (+880) <span
+                            <label for="phone" class="form-label">Phone <span
                                     class="text-danger fw-bold">*</span></label>
                             <input type="tel" class="form-control" id="phone" name="phone"
-                                placeholder="Enter your phone number after (+880)" pattern="[0-9]+" required>
-                            <div class="invalid-feedback">Please enter exactly 10 digits after +880 (e.g., "XXXXXXXXXX").
-                            </div>
+                                placeholder="Enter your valid Bangladesh phone number" required>
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address <span
                                     class="text-danger fw-bold">*</span></label>
                             <input type="text" class="form-control" id="address" name="address"
                                 placeholder="Enter your address" required>
-                            <div class="invalid-feedback">Please provide your address.</div>
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="city" class="form-label">City <span class="text-danger fw-bold">*</span></label>
                                 <input type="text" class="form-control" id="city" name="city" placeholder="City" required>
-                                <div class="invalid-feedback">Please enter your city.</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-md-4">
                                 <label for="state" class="form-label">State</label>
                                 <input type="text" class="form-control" id="state" name="state" placeholder="State">
-                                <div class="invalid-feedback">Please enter your state.</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-md-4">
                                 <label for="zip" class="form-label">ZIP <span class="text-danger fw-bold">*</span></label>
                                 <input type="text" class="form-control" id="zip" name="zip" placeholder="ZIP"
                                     pattern="[0-9]+" required>
-                                <div class="invalid-feedback">Please enter a valid ZIP code (numbers only).</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="mb-3 mb-3">
                             <label for="country" class="form-label">Country</label>
                             <input type="text" class="form-control" id="country" name="country" placeholder="Country">
-                            <div class="invalid-feedback">Please enter your country.</div>
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3 mb-3">
                             <div class="fullscreen-drop" id="fullscreenDrop">
@@ -193,7 +195,7 @@ include "layout/header.php";
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary update-btn" id="submit-button">Submit</button>
+                    <button type="submit" class="btn btn-primary update-btn" id="submit-button">Submit</button>
                 </div>
                 </form>
             </div>
@@ -230,7 +232,7 @@ include "layout/header.php";
                                         <td><span class="first-name">${item.first_name}</span> <span class="last-name">${item.last_name}</span></td>
                                         <td class="gender">${item.gender}</td>
                                         <td class="email">${item.email}</td>
-                                        <td>+880<span class="phone">${item.phone}</span></td>
+                                        <td><span class="phone">${item.phone}</span></td>
                                         <td><span class="address">${item.address}</span>, <span class="city">${item.city}</span>, <span class="state">${item.state}</span>, <span class="zip">${item.zip}</span>, <span class="country">${item.country}</span></td>
                                         <td>
                                             <div class="d-flex gap-2">
@@ -276,7 +278,6 @@ include "layout/header.php";
                         success: function(response) {
                             if (response.status === "success") {
                                 alert(response.message);
-                                button.closest("tr").remove(); // Remove the row from the table
                                 loadTableData(); // Refresh the table
                             } else {
                                 alert("Data not deleted: " + response);
@@ -292,18 +293,11 @@ include "layout/header.php";
             //contact-list scripts ends
 
             //form modal scripts starts
-            
-            // Hide all invalid-feedback initially
-            $(".invalid-feedback").hide();
 
             // When the modal is hidden, reset the form
             $("#exampleModal").on("hidden.bs.modal", function() {
                 // Reset the form fields
                 $(this).find("form")[0].reset();
-
-                // Remove custom validation classes
-                $(this).find("form").removeClass("was-validated");
-
                 // Clear custom error messages if present
                 $(this).find(".invalid-feedback").hide();
                 $(this).find(".is-invalid").removeClass("is-invalid");
@@ -403,7 +397,7 @@ include "layout/header.php";
                 $("#exampleModalLabel").text("Add New Record"); // Update modal title
                 $("#submit-button").text("Add").data("action", "add"); // Set action to "add"
                 $(".needs-validation")[0].reset(); // Clear form fields
-                $(".needs-validation").removeClass("was-validated"); // Reset validation
+                // $(".needs-validation").removeClass("was-validated"); // Reset validation
                 $("#exampleModal").modal("show"); // Show the modal
             });
 
@@ -459,8 +453,8 @@ include "layout/header.php";
                 event.preventDefault(); // Prevent form's default behavior
 
                 const form = $(".needs-validation")[0]; // Select the form
-                const phoneInput = $("#phone").val(); // Get the phone input value
-                const phoneRegex = /^\d{10}$/; // Regular expression for exactly 10 digits
+                // const phoneInput = $("#phone").val(); // Get the phone input value
+                // const phoneRegex = /^\d{10}$/; // Regular expression for exactly 10 digits
 
                 let isValid = true; // Track overall validity
 
@@ -483,16 +477,60 @@ include "layout/header.php";
                         }
                     });
 
-                // Phone number validation
-                if (!phoneRegex.test(phoneInput)) {
-                    $("#phone")
+                function validatePhoneNumber(number) {
+                    const validOps = ["12", "13", "14", "15", "16", "17", "18", "19"];
+
+                    if (number.startsWith("+")) {
+                        if (!number.startsWith("+880")) {
+                            return false;
+                        }
+                        if (number.length !== 14) {
+                            return false;
+                        }
+                        let localPart = number.slice(4);
+                        if (!/^\d{10}$/.test(localPart)) {
+                            return false;
+                        }
+                        let op = localPart.slice(0, 2);
+                        if (!validOps.includes(op)) {
+                            return false;
+                        }
+                        return true;
+                    } else {
+                        if (number.length === 10) {
+                            if (!/^\d{10}$/.test(number)) return false;
+                            let op = number.slice(0, 2);
+                            if (!validOps.includes(op)) return false;
+                            return true;
+                        } else if (number.length === 11) {
+                            if (!/^0\d{10}$/.test(number)) return false;
+                            let localPart = number.slice(1);
+                            let op = localPart.slice(0, 2);
+                            if (!validOps.includes(op)) return false;
+                            return true;
+                        } else if (number.length === 13) {
+                            if (!/^880\d{10}$/.test(number)) return false;
+                            let localPart = number.slice(3);
+                            let op = localPart.slice(0, 2);
+                            if (!validOps.includes(op)) return false;
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+                
+                    const phoneInput = $.trim($("#phone").val());
+
+                    if (validatePhoneNumber(phoneInput)) {
+                        $("#phone").next(".invalid-feedback").hide();
+                    } else {
+                        $("#phone")
                         .next(".invalid-feedback")
-                        .text("Phone number must be exactly 10 digits.")
+                        .text("Phone number must be start with +880 or 880 or 0 or only 10 digits. Use Bangladesh valid format.")
                         .show();
                     isValid = false;
-                } else {
-                    $("#phone").next(".invalid-feedback").hide();
-                }
+                    }
 
                 if (!isValid) {
                     return; // Stop execution

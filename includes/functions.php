@@ -97,15 +97,48 @@ function genderCount($genderName)
     return $genderCount;
 }
 
+function normalizePhoneNumber($phoneNumber) {
+    // Trim any whitespace around the input
+    $phoneNumber = trim($phoneNumber);
+
+    // If the number starts with "+880"
+    if (strpos($phoneNumber, "+880") === 0) {
+        return "880" . substr($phoneNumber, 4); // Remove "+" and store as "880"
+    }
+    
+    // If the number starts with "880"
+    if (strpos($phoneNumber, "880") === 0) {
+        return $phoneNumber; // Already in correct format
+    }
+    
+    // If the number starts with "0"
+    if (strpos($phoneNumber, "0") === 0) {
+        return "88" . $phoneNumber; // Add "88" in front of "0"
+    }
+    
+    // If the number is 10 digits (local format)
+    if (preg_match('/^\d{10}$/', $phoneNumber)) {
+        return "880" . $phoneNumber; // Add "880" at the beginning
+    }
+    
+    // If it doesn't match any case, return false (invalid number)
+    return false;
+}
+
+if (isset($_POST["phone"])) {
+    $phoneNumber = $conn->real_escape_string($_POST['phone']);
+    $phone = normalizePhoneNumber($phoneNumber);
+}
+
 function addContact()
 {
     global $conn;
+    global $phone;
 
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
     $gender = $conn->real_escape_string($_POST['gender']);
     $email = $conn->real_escape_string($_POST['email']);
-    $phone = $conn->real_escape_string($_POST['phone']);
     $address = $conn->real_escape_string($_POST['address']);
     $city = $conn->real_escape_string($_POST['city']);
     $state = $conn->real_escape_string($_POST['state']);
@@ -116,7 +149,7 @@ function addContact()
     $result = $conn->query($sql);
     $contact_num = $result->num_rows;
     if ($contact_num > 0) {
-        response("error","Contact with phone number +880$phone already exists");
+        response("error","Contact with phone number $phone already exists");
         exit;
     }
 
@@ -175,13 +208,13 @@ function addContact()
 function editContact()
 {
     global $conn;
+    global $phone;
 
     $id = $_POST['id'];
     $firstName = $conn->real_escape_string($_POST['firstName']);
     $lastName = $conn->real_escape_string($_POST['lastName']);
     $gender = $conn->real_escape_string($_POST['gender']);
     $email = $conn->real_escape_string($_POST['email']);
-    $phone = $conn->real_escape_string($_POST['phone']);
     $address = $conn->real_escape_string($_POST['address']);
     $city = $conn->real_escape_string($_POST['city']);
     $state = $conn->real_escape_string($_POST['state']);
@@ -239,10 +272,16 @@ function editContact()
     $sql = "UPDATE contacts SET 
                     first_name='$firstName', last_name='$lastName', gender='$gender', email='$email', phone='$phone',
                     address='$address', city='$city', state='$state', zip='$zip', country='$country', photo='$uploadPath'
-                WHERE id=$id";
+                WHERE id=$id AND NOT EXISTS (
+    SELECT 1 FROM contacts WHERE phone = '$phone' AND id != $id
+)";
 
     $result = mysqli_query($conn, $sql);
     if ($result) {
+        if (mysqli_affected_rows($conn) == 0) {
+            response("error","Contact with phone number $phone already exists");
+            exit;
+        }
         response("success","Record updated successfully for id: $id");
     } else {
         response("error","Error updating record: " . mysqli_error($conn));
