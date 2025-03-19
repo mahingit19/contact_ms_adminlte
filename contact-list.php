@@ -403,6 +403,7 @@ include "layout/header.php";
 
             // Show form for "Edit"
             $(document).on("click", ".edit-btn", function() {
+                
                 const row = $(this).closest("tr");
                 const rowData = {
                     id: row.find(".id").text(), // Assuming the table row has a class "id" for the ID
